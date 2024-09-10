@@ -51,11 +51,11 @@ composePerm p1 p2 = M.map (\x -> p1 M.! x) p2
 
 -- runghc cycles.hs
 
--- Example usage
+
 main :: IO ()
 main = do
-  let sigma = makePerm [(1,2), (2,3), (3,1)]
-      tau = makePerm [(1,2), (2,1), (3,3)]
+  let sigma = makePerm [(1,2), (2,3), (3,1), (4,5), (5,6)]
+      tau = makePerm [(1,2), (2,1), (3,3), (4,5), (5,8), (8,4)]
       sigmaInv = inversePerm sigma
       sigmaTau = composePerm sigma tau
 

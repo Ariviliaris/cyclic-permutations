@@ -1,35 +1,30 @@
-class Permutation:
-    def __init__(self, mapping):
-        """
-        Initialize the permutation with a mapping.
+import timeit
+from prototypes import Permutation, Cycle, CycleDecomposition
 
-        :param mapping: A dictionary where keys and values are integers representing the permutation.
-        """
-        self.permutation = {i + 1: mapping[i + 1] for i in range(len(mapping))}
+def main():
+    c1 = Cycle([1, 3, 4, 5])
+    c2 = Cycle([6, 7])
+    
+    new_c = c1 * c2
 
-    def __repr__(self):
-        return f"Permutation({self.permutation})"
-
-    def inverse(self):
-        """ Return the inverse of the permutation. """
-        inverse_mapping = {v: k for k, v in self.permutation.items()}
-        return Permutation(inverse_mapping)
-
-    def compose(self, other):
-        """ Compose this permutation with another permutation. """
-        composed_mapping = {k: self.permutation[other.permutation[k]] for k in self.permutation}
-        return Permutation(composed_mapping)
+    print(new_c.sign())
+    print(new_c.order())
+    print(new_c * new_c * new_c * new_c)
 
 
-# Driver code
-# Note: try identity permutations
+    # print(sigma.to_cycles())
+    # print(sigma.__repr__())
+    # print(sigma.__str__())
+    # print(sigma * sigma * sigma == sigma)
+    # print((tau * tau.inverse()).to_cycles())
+    # print(sigma)
+    # print(sigma * tau)
 
-sigma = Permutation({1: 2, 2: 3, 3: 1})
-tau = Permutation({1: 2, 2: 1, 3: 3})
-sigma_inv = sigma.inverse()
-sigma_tau = sigma.compose(tau)
+    # execution_time = timeit.timeit(sigma * tau, number=1000)
+    # print(f"Execution time for 1000 compositions: {execution_time:.6f} seconds")
 
-print("Sigma:", sigma)
-print("Tau:", tau)
-print("Sigma Inverse:", sigma_inv)
-print("Sigma composed with Tau:", sigma_tau)
+# print(sigma)
+# print(sigma.to_cycles())
+
+if __name__ == "__main__":
+    main()
