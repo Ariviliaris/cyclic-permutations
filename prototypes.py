@@ -1,9 +1,8 @@
 from math import gcd
 from functools import reduce
-import timeit
 
 class InvalidPermutationError(Exception):
-    """Custom exception for invalid permutations."""
+    """Custom exception for invalid permutations (when there is no bijection)."""
     pass
 
 class NonIntegerElementError(Exception):
@@ -104,12 +103,16 @@ class Permutation:
         return cycle_decomposition.order()
     
     def inverse(self):
-        """ Return the inverse of the permutation. """
+        """
+        Return the inverse of the permutation.
+        """
         inverse_mapping = {v: k for k, v in self.permutation.items()}
         return Permutation(inverse_mapping)
 
     def compose(self, other):
-        """ Compose this permutation with another permutation. """
+        """
+        Compose this permutation with another permutation.
+        """
         composed_mapping = {}
         all_keys = set(self.permutation.keys()).union(other.permutation.keys())
 
@@ -118,6 +121,24 @@ class Permutation:
             composed_mapping[k] = self.permutation.get(first, first)
 
         return Permutation(composed_mapping)
+    
+    def power(self, n):
+        """
+        Raise the permutation to the power of n by composing it with itself n times.
+        :param n: The exponent to which to raise the permutation (can be positive or negative).
+        :return: A new Permutation object representing the result.
+        """
+        if n == 0:
+            return Permutation({key: key for key in self.permutation})
+
+        if n < 0:
+            return self.inverse().power(-n)
+
+        result = self
+        for _ in range(n - 1):
+            result = result * self
+
+        return result
 
     def to_cycles(self):
         """
@@ -203,6 +224,23 @@ class Cycle:
     def __mul__(self, other):
         return self.compose(other)
     
+    def power(self, n):
+        """
+        Raise the cycle to the power of n by applying it n times.
+        If n is negative, use the inverse of the cycle.
+        :param n: The exponent to which to raise the cycle.
+        :return: A new Cycle object representing the result of the power.
+        """
+        if n == 0:
+            return Cycle([])
+
+        if n < 0:
+            return self.invert().power(-n)
+
+        perm = self.to_permutation()
+        perm_power = perm.power(n)
+        return perm_power.to_cycles().cycles[0]
+    
     def sign(self):
         """
         Calculate the sign of the cycle.
@@ -236,7 +274,9 @@ class CycleDecomposition:
             self.validate_decomposition()
 
     def validate_decomposition(self):
-        """ Validate the decomposition to ensure all cycles are disjoint. """
+        """
+        Validate the decomposition to ensure all cycles are disjoint.
+        """
         element_set = set()
         for cycle in self.cycles:
             cycle_elements = set(cycle.elements)
@@ -257,6 +297,16 @@ class CycleDecomposition:
     def __mul__(self, other):
         return self.compose(other)
 
+    def power(self, n):
+        """
+        Raise the cycle decomposition to the power of n by applying each cycle n times.
+        If n is negative, invert each cycle and apply |n|.
+        :param n: The exponent to which to raise the decomposition.
+        :return: A new CycleDecomposition representing the result of the power.
+        """
+        powered_cycles = [cycle.power(n) for cycle in self.cycles]
+        return CycleDecomposition(powered_cycles, validated=True)
+    
     def __eq__(self, other):
         if isinstance(other, CycleDecomposition):
             sorted_self_cycles = sorted([sorted(cycle.elements) for cycle in self.cycles])
@@ -267,7 +317,9 @@ class CycleDecomposition:
         return False
     
     def to_permutation(self):
-        """ Convert cycle decomposition to a permutation. """
+        """
+        Convert cycle decomposition to a permutation.
+        """
         mapping = {}
         for cycle in self.cycles:
             for i in range(len(cycle.elements)):
@@ -292,7 +344,7 @@ class CycleDecomposition:
     def order(self):
         """
         Calculate the order of the cycle decomposition.
-        The order is the least common multiple (LCM) of the orders of its cycles.
+        The order is the least common multiple (LCM) of the orders of its constituent cycles.
         :return: The order of the cycle decomposition.
         """
         if not self.cycles:

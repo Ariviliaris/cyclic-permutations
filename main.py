@@ -2,15 +2,20 @@ import timeit
 from prototypes import Permutation, Cycle, CycleDecomposition
 
 def main():
-    c1 = Cycle([1, 3, 4, 5])
-    c2 = Cycle([6, 7])
+    # c1 = Cycle([1, 3, 4, 5])
+    # c2 = Cycle([6, 7])
     
-    new_c = c1 * c2
+    # new_c = c1 * c2
 
-    print(new_c.sign())
-    print(new_c.order())
-    print(new_c * new_c * new_c * new_c)
-
+    # print(new_c.sign())
+    # print(new_c.order())
+    # print(new_c * new_c * new_c * new_c)
+    # perm = Cycle([1, 3, 4, 5]).to_permutation()
+    # print((perm.power(3)).to_cycles())
+    # s1 = Cycle([2, 5]) * Cycle([1, 2, 3, 4])
+    # print(s1 == s1.power(1))
+    # print(s1.power(2))
+    # print(s1.to_permutation().power(2).to_cycles())
 
     # print(sigma.to_cycles())
     # print(sigma.__repr__())
@@ -23,8 +28,16 @@ def main():
     # execution_time = timeit.timeit(sigma * tau, number=1000)
     # print(f"Execution time for 1000 compositions: {execution_time:.6f} seconds")
 
-# print(sigma)
-# print(sigma.to_cycles())
+    # print(sigma)
+    # print(sigma.to_cycles())
+    def compose_cycles():
+        s1 = Cycle([1, 2, 3, 4, 5, 6, 7]) * Cycle([2, 3, 4]) * Cycle([5]) * Cycle([5, 10, 7]) * Cycle([5, 7, 8]) * Cycle([3, 1, 5, 9, 8, 11, 12, 14, 13])
+        s2 = Cycle([3, 2, 5, 8, 1]) * Cycle([4, 3, 1, 2]) * Cycle([11, 10, 9]) * Cycle([1, 4]) * Cycle([8, 2, 7, 5, 9, 1, 4, 3, 6, 10]) * Cycle([14, 13, 12])
+        result = s1 * s2
+
+    n = 1000
+    execution_time = timeit.timeit(compose_cycles, number=n)
+    print(f"Time taken to compose the cycles: {execution_time/n:.6f} seconds")
 
 if __name__ == "__main__":
     main()
