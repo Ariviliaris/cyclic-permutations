@@ -28,6 +28,9 @@ def main():
     # execution_time = timeit.timeit(sigma * tau, number=1000)
     # print(f"Execution time for 1000 compositions: {execution_time:.6f} seconds")
 
+    # perm = Permutation({1:2, 2:3, 3:4, 4:1, 5:5})
+    # print(perm.to_cycles(include_one_cycles=True))
+
     # print(sigma)
     # print(sigma.to_cycles())
     def compose_cycles():
@@ -37,7 +40,7 @@ def main():
 
     n = 1000
     execution_time = timeit.timeit(compose_cycles, number=n)
-    print(f"Time taken to compose the cycles: {execution_time/n:.6f} seconds")
+    print(f"Time taken to compose the cycles: {execution_time/n:.8f} seconds")
 
 if __name__ == "__main__":
     main()

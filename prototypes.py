@@ -140,9 +140,11 @@ class Permutation:
 
         return result
 
-    def to_cycles(self):
+    def to_cycles(self, include_one_cycles=False):
         """
         Convert the permutation into its disjoint cycle form.
+        
+        :param include_one_cycles: If True, include 1-cycles in the output. Default is False.
         :return: A CycleDecomposition object representing the disjoint cycles.
         """
         visited = set()
@@ -160,11 +162,11 @@ class Permutation:
                     cycle.append(x)
                     x = self.permutation.get(x, x)
 
-                if len(cycle) > 1: 
+                if include_one_cycles or len(cycle) > 1:
                     cycles.append(Cycle(cycle))
 
         return CycleDecomposition(cycles, validated=True)
-
+    
 class Cycle:
     def __init__(self, elements, validated=False):
         """
