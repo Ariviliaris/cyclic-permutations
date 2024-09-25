@@ -210,7 +210,6 @@ class Cycle:
         elements form transpositions.
         """
         transpositions = []
-        # Create transpositions between consecutive elements in the cycle
         for i in range(len(self.elements) - 1):
             transpositions.append((self.elements[i], self.elements[i + 1]))
         return 
@@ -366,5 +365,5 @@ class CycleDecomposition:
         """
         transpositions = []
         for cycle in self.cycles:
-            transpositions.extend(cycle.to_transpositions())  # Get transpositions for each cycle
+            transpositions.extend(cycle.to_transpositions())
         return transpositions

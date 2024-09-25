@@ -1,0 +1,4 @@
+-- ghc cycles.hs
+-- ./cycles
+
+-- runghc cycles.hs
